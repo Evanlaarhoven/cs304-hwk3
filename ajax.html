@@ -1,0 +1,62 @@
+<!--Emily Van Laarhoven
+CS304 HW3 Ajax.html -->
+
+<!doctype html>
+<head>
+  <meta charset="utf-8">
+  <meta name=author content="Emily Van Laarhoven">
+  <meta name=description content="ajax hw page">
+  <title>cs304 ajax hw</title>
+  <link rel="stylesheet" href="">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+</head>
+<body>
+<h1>The 2014 Ruhlman Information </h1>
+
+<p> Click on each bullet point to see the details of that presentation!
+
+<div class="ruhlman-info-container"></div>
+ 
+<!-- put all the following in ajax.js file
+<script src="http://cs.wellesley.edu/~evanlaar/cs304-assignments/ajax.js"></script>
+-->
+
+<script>
+
+function displayInfo(jsonInfo) {
+ var i; 
+ var len = jsonInfo.length;
+ var listElt = $("<ul>");
+
+ for (i=0; i<len; i++) {
+   var talk = jsonInfo[i];
+   var presentersDict = talk.presenters;
+   var presents="";
+   var j; var pLen = presentersDict.length;
+
+   for(j=0;j<pLen;j++) {
+    presents+=presentersDict[j].display_name+", ";
+   }
+   var shortDesc = "Talk #: "+talk.tid+": "+talk.title+", presented by: "+presents+" starting at: "+talk.start_time+" in "+talk.location;
+   $("<li>").text(shortDesc).attr('description',talk.description).appendTo(listElt);
+  }
+
+$(".ruhlman-info-container").click(function(event) {
+ var longDesc = $(event.target).attr('description');
+ alert(longDesc);});
+
+$(".ruhlman-info-container").empty().append(listElt);
+
+}
+
+function loadInfo() {
+$.post("http://cs.wellesley.edu/~cs304/homeworks/ruhlman-2014.json",displayInfo,"json");
+}
+
+loadInfo();
+
+</script>
+
+</body>
+
+</html>
